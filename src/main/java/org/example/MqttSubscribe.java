@@ -18,15 +18,19 @@ public class MqttSubscribe {
 
         IMqttClient mqttClient = MqttConnector.connect(mqttConfiguration);
 
-        mqttClient.subscribe(mqttConfiguration.getTopic(), (topic1, msg) -> {
-            String message = new String(msg.getPayload(), StandardCharsets.UTF_8);
-            logger.info("Received message from topic: " + topic1);
-            logger.info("Message: " + message);
-        });
+        logMessages(mqttClient, mqttConfiguration);
 
         logger.info("Listening to topic: " + mqttConfiguration.getTopic());
         while (true) {
             mqttClient.isConnected();
         }
+    }
+
+    private static void logMessages(IMqttClient mqttClient, MqttConfiguration mqttConfiguration) throws MqttException {
+        mqttClient.subscribe(mqttConfiguration.getTopic(), (topic1, msg) -> {
+            String message = new String(msg.getPayload(), StandardCharsets.UTF_8);
+            logger.info("Received message from topic: " + topic1);
+            logger.info("Message: " + message);
+        });
     }
 }
